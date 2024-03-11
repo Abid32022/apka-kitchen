@@ -1,0 +1,3 @@
+ansarbazar_panel_auth
+admin@gmail.com
+admin123
