@@ -1,4 +1,5 @@
 
+import 'package:Apka_kitchen/view/base/discount_tag.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:Apka_kitchen/controller/banner_controller.dart';
 import 'package:Apka_kitchen/controller/category_controller.dart';
@@ -69,8 +70,28 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     Get.find<RestaurantController>().getRestaurantProductList(1, 1, false);
     Get.find<ProductController>().getPopularProductList(true, 'all', false);
 
-
+    // scrollController?.addListener(() {
+    //   if (scrollController.position.pixels ==
+    //           scrollController.position.maxScrollExtent &&
+    //       Get.find<RestaurantController>().restaurantProducts != null &&
+    //       !Get.find<RestaurantController>().foodPaginate) {
+    //     int pageSize =
+    //         (Get.find<RestaurantController>().foodPageSize / 10).ceil();
+    //     if (Get.find<RestaurantController>().foodOffset < pageSize) {
+    //       Get.find<RestaurantController>()
+    //           .setFoodOffset(Get.find<RestaurantController>().foodOffset + 1);
+    //       print('end of the page');
+    //       Get.find<RestaurantController>().showFoodBottomLoader();
+    //       Get.find<RestaurantController>().getRestaurantProductList(
+    //         widget.restaurant.id,
+    //         Get.find<RestaurantController>().foodOffset,
+    //         false,
+    //       );
+    //     }
+    //   }
+    // });
   }
+
   Future<void> _checkNotificationPermission() async {
     PermissionStatus notificationStatus = await Permission.notification.status;
     if (!notificationStatus.isGranted) {
@@ -85,6 +106,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
           SnackBar(content: Text('Notification permission is required.')));
     }
   }
+
   TextEditingController _controller = TextEditingController();
   @override
   void dispose() {
@@ -99,28 +121,30 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
       appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
       backgroundColor: Colors.white,
       body: RefreshIndicator(
+        color: Colors.white,
         onRefresh: () async {
           Get.find<ProductController>().getAllProductList();
           Get.find<ProductController>().getListenerPaginationCall();
-          Get.find<RestaurantController>().getRestaurantDetails(Restaurant(id: 1));
+          Get.find<RestaurantController>()
+              .getRestaurantDetails(Restaurant(id: 1));
           if (Get.find<CategoryController>().categoryList == null) {
             Get.find<CategoryController>().getCategoryList(true);
           }
-          Get.find<RestaurantController>().getRestaurantProductList(1, 1, false);
-          Get.find<ProductController>().getPopularProductList(true, 'all', false);
+          Get.find<RestaurantController>()
+              .getRestaurantProductList(1, 1, false);
+          Get.find<ProductController>()
+              .getPopularProductList(true, 'all', false);
           // await Get.find<BannerController>().getBannerList(true);
           // await Get.find<CategoryController>().getCategoryList(true);
-          //  await Get.find<RestaurantController>().getPopularRestaurantList(true, 'all', false);
-          //   await Get.find<CampaignController>().getItemCampaignList(true);
+          // //  await Get.find<RestaurantController>().getPopularRestaurantList(true, 'all', false);
+          // //   await Get.find<CampaignController>().getItemCampaignList(true);
           // await Get.find<ProductController>().getPopularProductList(true, 'all', false);
           //   await Get.find<RestaurantController>().getLatestRestaurantList(true, 'all', false);
-          //   await Get.find<ProductController>().getReviewedProductList(true, 'all', false);
+          // //   await Get.find<ProductController>().getReviewedProductList(true, 'all', false);
           // await Get.find<RestaurantController>().getRestaurantList('1', true);
-
           // if (Get.find<AuthController>().isLoggedIn()) {
           //   await Get.find<UserController>().getUserInfo();
-          //   await Get.find<NotificationController>()
-          //       .getNotificationList(true);
+          //   await Get.find<NotificationController>().getNotificationList(true);
           // }
         },
         child: GetBuilder<RestaurantController>(builder: (restController) {
@@ -144,16 +168,16 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     ? SliverToBoxAdapter(
                   child: Container(
                     // color: Color(0xFF171A29),
-                    padding:
-                    EdgeInsets.all(Dimensions.PADDING_SIZE_LARGE),
+                    padding: EdgeInsets.all(
+                        Dimensions.PADDING_SIZE_LARGE),
                     alignment: Alignment.center,
                     child: Center(
                         child: SizedBox(
                             width: Dimensions.WEB_MAX_WIDTH,
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                  Dimensions.PADDING_SIZE_SMALL),
+                                  horizontal: Dimensions
+                                      .PADDING_SIZE_SMALL),
                               child: Row(children: [
                                 //   Expanded(
                                 // child: CustomImage(
@@ -165,8 +189,10 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                 // SizedBox(width: Dimensions.PADDING_SIZE_LARGE),
 
                                 Expanded(
-                                    child: RestaurantDescriptionView(
-                                        restaurant: _restaurant)),
+                                    child:
+                                    RestaurantDescriptionView(
+                                        restaurant:
+                                        _restaurant)),
                               ]),
                             ))),
                   ),
@@ -185,13 +211,12 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: 2,
+                          width: 6,
                         ),
-                          Image.asset("assets/image/homelogo.png",color: Colors.white),
+                        Image.asset("assets/image/whitelogo.png"),
                       ],
                     ),
                   ),
-
                   actions: [
                     GestureDetector(
                         onTap: () {
@@ -200,7 +225,9 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                         },
                         child: Icon(Icons.notifications,
                             color: Colors.white)),
-                    SizedBox(width: 10,),
+                    SizedBox(
+                      width: 10,
+                    ),
                     IconButton(
                       onPressed: () =>
                           Get.toNamed(RouteHelper.getCartRoute()),
@@ -211,29 +238,34 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             shape: BoxShape.circle,
                             color: Colors.black),
                         alignment: Alignment.center,
-                        child:
-                        CartWidget(
-                            color: Colors.white,
-                            size: 18,
+                        child: CartWidget(
+                            color: Theme.of(context).cardColor,
+                            size: 15,
                             fromRestaurant: true),
-
                       ),
                     ),
-                    SizedBox(width: 10,),
+                    SizedBox(
+                      width: 10,
+                    ),
                     GestureDetector(
-                      onTap: (){
-                        Get.to(()=> SearchScreen());
-                      },
-                        child: Image.asset("assets/image/searchicon.png",height: 23,width: 23,)),
+                        onTap: () {
+                          Get.to(() => SearchScreen());
+                        },
+                        child: Icon(Icons.search)),
                     SizedBox(
                       width: 22,
                     ),
                     GestureDetector(
-                        onTap: (){
-                          Get.to(()=> ChatScreen2());
+                        onTap: () async {
+                          Get.to(() => ChatScreen2());
                         },
-                        child: Icon(Icons.message,size: 20,)),
-                    SizedBox(width: 20,)
+                        child: Icon(
+                          Icons.message,
+                          size: 20,
+                        )),
+                    SizedBox(
+                      width: 20,
+                    )
                   ],
                 ),
 
@@ -244,7 +276,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                           padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                           color: Colors.white,
                           child: Column(children: [
-
                             // GetBuilder<BannerController>(
                             //     builder: (bannerController) {
                             //       return bannerController.bannerImageList == null
@@ -305,7 +336,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                               padding: EdgeInsets.all(
                                   Dimensions.PADDING_SIZE_SMALL),
                               child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       _restaurant.discount.discountType ==
@@ -313,8 +345,10 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                           ? '${_restaurant.discount.discount}% OFF'
                                           : '${PriceConverter.convertPrice(_restaurant.discount.discount)} OFF',
                                       style: robotoMedium.copyWith(
-                                          fontSize: Dimensions.fontSizeLarge,
-                                          color: Theme.of(context).cardColor),
+                                          fontSize:
+                                          Dimensions.fontSizeLarge,
+                                          color:
+                                          Theme.of(context).cardColor),
                                     ),
                                     Text(
                                       _restaurant.discount.discountType ==
@@ -323,8 +357,10 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                           : '${'enjoy'.tr} ${PriceConverter.convertPrice(_restaurant.discount.discount)}'
                                           ' ${'off_on_all_categories'.tr}',
                                       style: robotoMedium.copyWith(
-                                          fontSize: Dimensions.fontSizeSmall,
-                                          color: Theme.of(context).cardColor),
+                                          fontSize:
+                                          Dimensions.fontSizeSmall,
+                                          color:
+                                          Theme.of(context).cardColor),
                                     ),
                                     SizedBox(
                                         height: (_restaurant.discount
@@ -361,7 +397,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                       style: robotoRegular.copyWith(
                                           fontSize:
                                           Dimensions.fontSizeExtraSmall,
-                                          color: Theme.of(context).cardColor),
+                                          color:
+                                          Theme.of(context).cardColor),
                                     ),
                                   ]),
                             )
@@ -372,18 +409,26 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 /// category tabs
                 /// category tabs
 
-
-                SliverToBoxAdapter(child:
-                Center(
+                SliverToBoxAdapter(child: Center(
                   child: GetBuilder<ProductController>(
                     builder: (productcontroller) {
-                      List<Product> filteredProducts = productcontroller.allproductList ?? [];
-                      filteredProducts = filteredProducts.where((product) => _controller.text.isEmpty || product.name.toLowerCase().contains(_controller.text.toLowerCase())).toList();
+                      List<Product> filteredProducts =
+                          productcontroller.allproductList ?? [];
+                      filteredProducts = filteredProducts
+                          .where((product) =>
+                      _controller.text.isEmpty ||
+                          product.name.toLowerCase().contains(
+                              _controller.text.toLowerCase()))
+                          .toList();
 
                       // Reorder the list to place matching items at the beginning
                       filteredProducts.sort((a, b) {
-                        bool containsSearchA = a.name.toLowerCase().contains(_controller.text.toLowerCase());
-                        bool containsSearchB = b.name.toLowerCase().contains(_controller.text.toLowerCase());
+                        bool containsSearchA = a.name
+                            .toLowerCase()
+                            .contains(_controller.text.toLowerCase());
+                        bool containsSearchB = b.name
+                            .toLowerCase()
+                            .contains(_controller.text.toLowerCase());
 
                         if (containsSearchA && !containsSearchB) {
                           return -1; // Place A before B
@@ -396,416 +441,408 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                         }
                       });
 
-                      return GetBuilder<WishListController>(builder: (wishList){
-                          return  Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: Dimensions.PADDING_SIZE_DEFAULT),
-                            width: Dimensions.WEB_MAX_WIDTH,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                            ),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 17,
-                                  ),
-                                  Container(
-                                      height: 180,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                      ),
-                                      child: buildItem()),
+                      return GetBuilder<WishListController>(
+                          builder: (wishList) {
+                            return Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                  Dimensions.PADDING_SIZE_DEFAULT),
+                              width: Dimensions.WEB_MAX_WIDTH,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 17,
+                                    ),
+                                    Container(
+                                        height: 180,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        child: buildItem()),
 
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text('Categories'.tr,
-                                      style: robotoMedium.copyWith(
-                                          fontSize:
-                                          Dimensions.fontSizeLarge + 2,
-                                          fontWeight: FontWeight.w700)),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text('Categories'.tr,
+                                        style: robotoMedium.copyWith(
+                                            fontSize:
+                                            Dimensions.fontSizeLarge + 2,
+                                            fontWeight: FontWeight.w700)),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
 
-                                  GridView.builder(
-                                      itemCount: restController.categoryList.length,
-                                      scrollDirection: Axis.vertical,
-                                      padding: EdgeInsets.zero,
-                                      physics:
-                                      NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                        childAspectRatio: 8 / 7,
-                                        crossAxisCount: 3,
-                                        crossAxisSpacing: 8,
-                                        mainAxisExtent: 160,
-                                        mainAxisSpacing: 6,
-                                      ),
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            Get.to(() =>
-                                                CategoryProductScreen(
+                                    GridView.builder(
+                                        itemCount: restController
+                                            .categoryList.length,
+                                        scrollDirection: Axis.vertical,
+                                        padding: EdgeInsets.zero,
+                                        physics:
+                                        NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                          childAspectRatio: 8 / 7,
+                                          crossAxisCount: 3,
+                                          crossAxisSpacing: 8,
+                                          mainAxisExtent: 160,
+                                          mainAxisSpacing: 6,
+                                        ),
+                                        itemBuilder: (context, index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              // print("this is category list ${restController.categoryList[index].name}");
+                                              Get.to(
+                                                    () => CategoryProductScreen(
                                                   categoryID: restController.categoryList[index].id.toString(),
                                                   categoryName: restController.categoryList[index].name,
                                                   deliveryfee: categoryController.categoryList != null && categoryController.categoryList.isNotEmpty && index < categoryController.categoryList.length
                                                       ? [double.tryParse(categoryController.categoryList[index].deliverycharges ?? '50.0')]
                                                       : [50.0],
 
-
                                                   // deliveryfee: productcontroller.allproductList.isNotEmpty && index < productcontroller.allproductList.length
                                                   //     ? [double.parse(categoryController.categoryList[index].deliverycharges)]
                                                   //     : [], // Start with an empty list
 
-                                                ),);
-                                            //
-                                            //
-                                            // CategoryProductScreen(categoryID: restController.categoryList[index].id.toString(),categoryName: restController.categoryList[index].name,));
-                                            // restController.setCategoryIndex(index);
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(6),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors
-                                                          .black
-                                                          .withOpacity(
-                                                          0.10),
-                                                      spreadRadius: 0,
-                                                      blurRadius: 23,
-                                                      offset:
-                                                      Offset(0, 1)),
-                                                ]),
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  height: 120,
-                                                  // color: Colors.red,
-                                                  width: Get.width,
-                                                  child: Column(
-                                                    children: [
-                                                      SizedBox(
-                                                        height: 17,
-                                                      ),
-                                                      // Image.asset("assets/image/img_5.png",height: 85,width: 88,),
-                                                      Container(
-                                                          height: 88,
-                                                          width: 88,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                              BorderRadius.circular(
-                                                                  10)),
-                                                          child: ClipRRect(
-                                                              borderRadius: BorderRadius.circular(10),
-                                                              child: Image.network(
-                                                                // "https://s3bits.com/ansaarbazar/storage/app/public/category/${restController.categoryList[index].image}",
-                                                                // "http://23.108.96.28/~s3bitsdev/ansaarbazar/storage/app/public/category/${restController.categoryList[index].image}",
-                                                                "https://s3bits.com/apkakitchen/storage/app/public/category/${restController.categoryList[index].image}",
-                                                                height:
-                                                                85,
-                                                                width:
-                                                                88,
-                                                                fit: BoxFit
-                                                                    .fill,
-                                                              )))
-                                                    ],
-                                                  ),
                                                 ),
-                                                Center(
-                                                  child: Text(
-                                                      restController
-                                                          .categoryList[
-                                                      index]
-                                                          .name,
-                                                      textAlign:
-                                                      TextAlign
-                                                          .center,
-                                                      style:
-                                                      robotoMedium
-                                                          .copyWith(
-                                                        fontSize: Dimensions
-                                                            .fontSizeDefault,
-                                                        color: Colors
-                                                            .black,
-                                                      )),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      }),
-
-
-                                  ///under tabs products
-                                  ///under tabs products
-
-
-
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text('Recomended Products',
-                                      style: robotoMedium.copyWith(
-                                          fontSize:
-                                          Dimensions.fontSizeLarge + 2,
-                                          fontWeight: FontWeight.w700)),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-
-                                  ///
-                                  // productcontroller.allproductList == null ||
-                                  //     productcontroller.isLoading
-                                  //     ? Center(
-                                  //     child: CircularProgressIndicator())
-                                  //     : productcontroller
-                                  //     .allproductList.length >
-                                  //     0
-                                  //     ? _controller.text
-                                  //     .toString()
-                                  //     .isEmpty
-                                  //     ?
-
-
-                            Container(
-                              height: 500,
-                              color: Colors.white,
-                              child: NotificationListener<ScrollNotification>(
-                                onNotification: (ScrollNotification scrollInfo) {
-                                  if (!productcontroller.isLoadingMore &&
-                                      scrollInfo.metrics.pixels ==
-                                          scrollInfo.metrics.maxScrollExtent) {
-                                    // Start loading more products here
-                                    productcontroller.getListenerPaginationData();
-                                    return true;
-                                  }
-                                  return false;
-                                },
-                                child: GridView.builder(
-                                  itemCount: productcontroller.isLoadingMore
-                                      ? productcontroller.allproductList.length + 1
-                                      : productcontroller.allproductList.length,
-                                  scrollDirection: Axis.vertical,
-                                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-                                  controller: productcontroller.scrollController,
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                    childAspectRatio: 8 / 7,
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 3,
-                                    mainAxisExtent: 230,
-                                    mainAxisSpacing: 10,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    if (index < productcontroller.allproductList.length) {
-                                      return Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 4, vertical: 2),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                        height: 202,
-                                        width: 163,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                          BorderRadius.circular(10),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black
-                                                  .withOpacity(0.24),
-                                              spreadRadius: 0,
-                                              blurRadius: 23,
-                                              offset: Offset(0, 1),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Stack(
-                                              clipBehavior: Clip.none,
-                                              children: [
-                                                Container(
-                                                  height: 120,
-                                                  width:
-                                                  double.infinity,
-                                                  decoration:
-                                                  BoxDecoration(
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(
-                                                        10),
-                                                  ),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(
-                                                        4),
-                                                    child: CustomImage(
-                                                      height: 120,
-                                                      width: 120,
-                                                      fit: BoxFit.fill,
-
-                                                      // placeholder: "assets/image/placeholderiages.png",
-                                                      image:
-                                                      "https://ansaarbazar.com/api/storage/app/public/product/${productcontroller.allproductList[index].image}",
-                                                    ),
-                                                  ),
-                                                ),
-
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    wishList.addToWishList(
-                                                        productcontroller
-                                                            .allproductList[
-                                                        index],
-                                                        Restaurant(),
-                                                        false);
-                                                    if (kDebugMode) {
-                                                      print('Done');
-                                                    }
-                                                  },
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .end,
-                                                    children: [
-                                                      // Icon(Icons.favorite_border,color: wishList.,)
-                                                      wishList.isInWishList(
-                                                        id: productcontroller
-                                                            .allproductList[
-                                                        index]
-                                                            .id,
-                                                        isRestaurant:
-                                                        false,
-                                                      )
-                                                          ? Icon(
-                                                        Icons
-                                                            .favorite,
-                                                        color: Colors
-                                                            .red,
-                                                      )
-                                                          : Icon(
-                                                        Icons
-                                                            .favorite,
-                                                        color: Colors
-                                                            .blue,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 4,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Text(
-                                              productcontroller
-                                                  .allproductList[index]
-                                                  .name,
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                overflow: TextOverflow
-                                                    .ellipsis,
-                                                fontWeight:
-                                                FontWeight.w500,
-                                                color: Colors.black,
-                                              ),
-                                              maxLines: 2,
-                                            ),
-                                            SizedBox(
-                                              height: 4,
-                                            ),
-                                            Text(
-                                              "${productcontroller.allproductList[index].unit} , RS: ${productcontroller.allproductList[index].price.toString()}",
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight:
-                                                FontWeight.w600,
-                                                // color: Color(0xff373491),
-                                                color: Colors.black,
-                                                overflow: TextOverflow
-                                                    .ellipsis,
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.to(() =>
-                                                    ProductDetailScreen(
-                                                        deliveryCharges: [
-                                                          double.parse(productcontroller.allproductList[index].delivery_price)
-                                                        ],
-                                                        // deliveryCharges: [double.parse(productcontroller.allproductList[index].delivery_price)],
-                                                        product:
-                                                        productcontroller
-                                                            .allproductList[
-                                                        index],
-                                                        inRestaurantPage:
-                                                        true,
-                                                        isCampaign:
-                                                        false));
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .end,
+                                              );
+                                              //
+                                              //
+                                              // CategoryProductScreen(categoryID: restController.categoryList[index].id.toString(),categoryName: restController.categoryList[index].name,));
+                                              // restController.setCategoryIndex(index);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      6),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: Colors.black
+                                                            .withOpacity(
+                                                            0.10),
+                                                        spreadRadius: 0,
+                                                        blurRadius: 23,
+                                                        offset: Offset(0, 1)),
+                                                  ]),
+                                              child: Column(
                                                 children: [
                                                   Container(
-                                                    height: 30,
-                                                    width: 30,
-                                                    decoration:
-                                                    BoxDecoration(
-                                                      shape: BoxShape
-                                                          .circle,
-                                                      color: AppColors
-                                                          .primarycolor,
-                                                      // color: Color(0xff189084),
+                                                    height: 120,
+                                                    // color: Colors.red,
+                                                    width: Get.width,
+                                                    child: Column(
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 17,
+                                                        ),
+                                                        // Image.asset("assets/image/img_5.png",height: 85,width: 88,),
+                                                        Container(
+                                                            height: 88,
+                                                            width: 88,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    10)),
+                                                            child: ClipRRect(
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    10),
+                                                                child: Image
+                                                                    .network(
+                                                                  // "https://s3bits.com/ansaarbazar/storage/app/public/category/${restController.categoryList[index].image}",
+                                                                  // "http://23.108.96.28/~s3bitsdev/ansaarbazar/storage/app/public/category/${restController.categoryList[index].image}",
+                                                                  "https://ansaarbazar.com/api/storage/app/public/category/${restController.categoryList[index].image}",
+                                                                  height: 85,
+                                                                  width: 88,
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                )))
+                                                      ],
                                                     ),
-                                                    child: Icon(
-                                                      Icons.add,
-                                                      color:
-                                                      Colors.white,
-                                                      size: 18,
-                                                    ),
+                                                  ),
+                                                  Center(
+                                                    child: Text(
+                                                        restController
+                                                            .categoryList[
+                                                        index]
+                                                            .name,
+                                                        textAlign:
+                                                        TextAlign.center,
+                                                        style: robotoMedium
+                                                            .copyWith(
+                                                          fontSize: Dimensions
+                                                              .fontSizeDefault,
+                                                          color: Colors.black,
+                                                        )),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                          ],
+                                          );
+                                        }),
+
+                                    ///under tabs products
+                                    ///under tabs products
+
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text('Recomended Products',
+                                        style: robotoMedium.copyWith(
+                                            fontSize:
+                                            Dimensions.fontSizeLarge + 2,
+                                            fontWeight: FontWeight.w700)),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Container(
+                                      height: 500,
+                                      color: Colors.white,
+                                      child: NotificationListener<ScrollNotification>(
+                                        onNotification: (ScrollNotification scrollInfo) {
+                                          if (!productcontroller.isLoadingMore &&
+                                              scrollInfo.metrics.pixels ==
+                                                  scrollInfo.metrics.maxScrollExtent) {
+                                            // Start loading more products here
+                                            productcontroller.getListenerPaginationData();
+                                            return true;
+                                          }
+                                          return false;
+                                        },
+                                        child: GridView.builder(
+                                          itemCount: productcontroller.isLoadingMore
+                                              ? productcontroller.allproductList.length + 1
+                                              : productcontroller.allproductList.length,
+                                          scrollDirection: Axis.vertical,
+                                          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                                          controller: productcontroller.scrollController,
+                                          physics: AlwaysScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                            childAspectRatio: 8 / 7,
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 3,
+                                            mainAxisExtent: 230,
+                                            mainAxisSpacing: 10,
+                                          ),
+                                          itemBuilder: (context, index) {
+                                            if (index < productcontroller.allproductList.length) {
+                                              return Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 4, vertical: 2),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 16),
+                                                height: 202,
+                                                width: 163,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                  BorderRadius.circular(10),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.24),
+                                                      spreadRadius: 0,
+                                                      blurRadius: 23,
+                                                      offset: Offset(0, 1),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+
+
+                                                    Stack(
+                                                      clipBehavior: Clip.none,
+                                                      children: [
+                                                        Container(
+                                                          height: 120,
+                                                          width:
+                                                          double.infinity,
+                                                          decoration:
+                                                          BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                10),
+                                                          ),
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                4),
+                                                            child: CustomImage(
+                                                              height: 120,
+                                                              width: 120,
+                                                              fit: BoxFit.fill,
+
+                                                              // placeholder: "assets/image/placeholderiages.png",
+                                                              image:
+                                                              "https://ansaarbazar.com/api/storage/app/public/product/${productcontroller.allproductList[index].image}",
+                                                            ),
+                                                          ),
+                                                        ),
+
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            wishList.addToWishList(
+                                                                productcontroller
+                                                                    .allproductList[
+                                                                index],
+                                                                Restaurant(),
+                                                                false);
+                                                            if (kDebugMode) {
+                                                              print('Done');
+                                                            }
+                                                          },
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                            children: [
+                                                              // Icon(Icons.favorite_border,color: wishList.,)
+                                                              wishList.isInWishList(
+                                                                id: productcontroller
+                                                                    .allproductList[
+                                                                index]
+                                                                    .id,
+                                                                isRestaurant:
+                                                                false,
+                                                              )
+                                                                  ? Icon(
+                                                                Icons
+                                                                    .favorite,
+                                                                color: Colors
+                                                                    .red,
+                                                              )
+                                                                  : Icon(
+                                                                Icons
+                                                                    .favorite,
+                                                                color: Colors
+                                                                    .blue,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 4,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        DiscountTag(
+                                                            discount: productcontroller.allproductList[index].discount,
+                                                            discountType: productcontroller.allproductList[index].discountType,
+                                                            freeDelivery: false
+                                                        ),
+                                                      ],
+                                                    ),
+
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    Text(
+                                                      productcontroller
+                                                          .allproductList[index]
+                                                          .name,
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        fontWeight:
+                                                        FontWeight.w500,
+                                                        color: Colors.black,
+                                                      ),
+                                                      maxLines: 2,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 4,
+                                                    ),
+                                                    Text(
+                                                      "${productcontroller.allproductList[index].unit} , RS: ${productcontroller.allproductList[index].price.toString()}",
+                                                      style: TextStyle(
+                                                        fontSize: 13,
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                        // color: Color(0xff373491),
+                                                        color: Colors.black,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Get.to(() =>
+                                                            ProductDetailScreen(
+                                                                deliveryCharges: [
+                                                                  double.parse(productcontroller.allproductList[index].delivery_price)
+                                                                ],
+                                                                // deliveryCharges: [double.parse(productcontroller.allproductList[index].delivery_price)],
+                                                                product:
+                                                                productcontroller
+                                                                    .allproductList[
+                                                                index],
+                                                                inRestaurantPage:
+                                                                true,
+                                                                isCampaign:
+                                                                false));
+                                                      },
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .end,
+                                                        children: [
+                                                          Container(
+                                                            height: 30,
+                                                            width: 30,
+                                                            decoration:
+                                                            BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              color: AppColors
+                                                                  .primarycolor,
+                                                              // color: Color(0xff189084),
+                                                            ),
+                                                            child: Icon(
+                                                              Icons.add,
+                                                              color:
+                                                              Colors.white,
+                                                              size: 18,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+
+                                            } else {
+                                              return Center(
+                                                child: CircularProgressIndicator(color: Colors.blue),
+                                              );
+                                            }
+                                          },
                                         ),
-                                      );
-
-                                    } else {
-                                      return Center(
-                                        child: CircularProgressIndicator(color: Colors.blue),
-                                      );
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                                  SizedBox(
-                                    height: 40,
-                                  )
-                                ]),
-                          );
-                        });
-
-
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                    )
+                                  ]),
+                            );
+                          });
 
                       ///
                     },
@@ -819,7 +856,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
       ),
     );
   }
-  
+
   Widget buildItem() {
     return Stack(
       clipBehavior: Clip.none,
@@ -841,7 +878,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
               )
             ],
             image: DecorationImage(
-              image: AssetImage("assets/image/banner.png"),
+              image: AssetImage("assets/image/img_13.png"),
               fit: BoxFit.fill,
             ),
             borderRadius: BorderRadius.circular(15),
@@ -851,7 +888,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
       ],
     );
   }
-
 }
 
 class SliverDelegate extends SliverPersistentHeaderDelegate {
@@ -884,3 +920,4 @@ class CategoryProduct {
   List<Product> products;
   CategoryProduct(this.category, this.products);
 }
+

@@ -25,13 +25,15 @@ class CartWidget extends StatelessWidget {
             height: size < 20 ? 10 : size/2, width: size < 20 ? 10 : size/2, alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle, color: fromRestaurant ? Theme.of(context).cardColor :AppColors.primarycolor
-              ,border: Border.all(width: size < 20 ? 0.7 : 1, color: fromRestaurant ?Color(0xFF009f67) : Theme.of(context).cardColor),
+              ,border: Border.all(width: size < 20 ? 0.7 : 1, color: fromRestaurant ?Colors.black : Theme.of(context).cardColor),
             ),
             child: Text(
               cartController.cartList.length.toString(),
               style: robotoRegular.copyWith(
                 fontSize: size < 20 ? size/3 : size/3.8,
-                color: fromRestaurant ?Color(0xFF009f67) : Theme.of(context).cardColor,
+                color: fromRestaurant ?Colors.black
+
+                    : Theme.of(context).cardColor,
               ),
             ),
           ),

@@ -235,7 +235,7 @@ class RestaurantController extends GetxController implements GetxService {
       Response response = await restaurantRepo.getRestaurantProductList(
         restaurantID, offset,
         // (_restaurant != null && _restaurant.categoryIds.length > 0 && _categoryIndex != 0)
-             _categoryList[_categoryIndex].id, type,
+        _categoryList[_categoryIndex].id, type,
       );
       if (response.statusCode == 200) {
         print("sub category body is ${response.body}");
